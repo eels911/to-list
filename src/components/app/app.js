@@ -61,45 +61,36 @@ export default class  App extends Component {
       };
     });
   };
-  onToggleImportant = (id) => {
-    console.log('Toggle important', id);
-  };
-
   toggleProperty(arr,id, propName) {
     const idx = arr.findIndex((el) => el.id === id);
-     // 1. update object
-        const oldItem =  todoData[idx]
-        const newItem = {... oldItem,
-          done: !oldItem.done}
-      // 2. construct new array
+    // 1. update object
+    const oldItem =  arr[idx]
+    const newItem = {... oldItem,
+      [propName]: !oldItem[propName]}
+    // 2. construct new array
+    return [
+      ...arr.slice(0, idx),
+      newItem,
+      ... arr.slice(idx + 1)
+    ];
+    // возвращ аем новый стэйт
 
-      const newArray = [
-        ...todoData.slice(0, idx),
-        newItem,
-        ... todoData.slice(idx + 1)
-      ];
-      // возвращаем новый стэйт
-      return {
-        todoData: newArray
-      };
   }
-  onToggleDone = (id) => {
-      this.setState(({todoData}) => {
-        const idx = todoData.findIndex((el) => el.id === id);
-     // 1. update object
-        const oldItem =  todoData[idx]
-        const newItem = {... oldItem,
-          done: !oldItem.done}
-      // 2. construct new array
+  onToggleImportant = (id) => {
+    // возвращаем новый стэйт
+    this.setState(({todoData}) => {
+      return {
+        todoData: this.toggleProperty(todoData, id, 'done')
+      };
+    })
+  };
 
-      const newArray = [
-        ...todoData.slice(0, idx),
-        newItem,
-        ... todoData.slice(idx + 1)
-      ];
+    onToggleDone = (id) => {
+      this.setState(({todoData}) => {
+
       // возвращаем новый стэйт
       return {
-        todoData: newArray
+        todoData: this.toggleProperty(todoData,id, 'done')
       };
       });
   }
